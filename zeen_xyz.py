@@ -6,11 +6,11 @@ manager = Manager(app)
 
 @app.route('/')
 def index():
-    return '<h1>This is zeen.xyz</h1>'
+    return render_template('index.html')
 
 @app.route('/user/<name>')
 def user(name):
-    return "greetings %s" % name
+    return render_template('user.html', name=name)
 
 if __name__ == '__main__':
     manager.run()
