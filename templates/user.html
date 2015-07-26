@@ -1,1 +1,9 @@
-<h3>Greetings, {{ name }}.</h3>
+{% extends "base.html" %}
+
+{% block title %}zeen{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h3>Greetings, {{ name }}.</h3>
+</div>
+{% endblock %}
