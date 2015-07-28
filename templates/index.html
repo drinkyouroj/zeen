@@ -1,10 +1,16 @@
 {% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}zeen{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
     <h1>This is zeen.xyz</h1>
+    <h3>{% if name %}Hi, {{ name }}!{% else %}Welcome, stranger.{% endif %}</h3>
 </div>
+
+{{ wtf.quick_form(form) }}
+
 <p>Page rendered at {{ moment(current_time).format('LLL') }} ({{ moment(current_time).fromNow(refresh=True) }}).</p>
+
 {% endblock %}
