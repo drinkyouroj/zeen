@@ -5,4 +5,5 @@ venv/lib
 venv/include
 
 # junk data
+__pycache__/
 data.sqlite
