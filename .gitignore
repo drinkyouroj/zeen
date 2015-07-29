@@ -7,3 +7,5 @@ venv/include
 # junk data
 __pycache__/
 data.sqlite
+data-dev.sqlite
+data-test.sqlite
