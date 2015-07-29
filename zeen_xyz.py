@@ -6,6 +6,7 @@ from flask.ext.bootstrap import Bootstrap
 from flask.ext.moment import Moment
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.migrate import Migrate, MigrateCommand
+from flask.ext.mail import Mail, Message
 from flask.ext.wtf import Form
 from wtforms import StringField, SubmitField
 from wtforms.validators import Required
@@ -17,12 +18,22 @@ app.config['SECRET_KEY'] = '123456seven'
 app.config['SQLALCHEMY_DATABASE_URI'] =\
     'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+app.config['MAIL_SERVER'] = 'email-smtp.us-west-2.amazonaws.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['ZEEN_MAIL_SUBJECT_PREFIX'] = '[zeen]'
+app.config['ZEEN_MAIL_SENDER'] = 'zeen Admin <zeen@hearn.me>'
+app.config['ZEEN_ADMIN'] = os.environ.get('ZEEN_ADMIN')
+
 
 manager = Manager(app)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+mail = Mail(app)
 
 
 def make_shell_context():
@@ -65,6 +76,9 @@ def index():
             user = User(username=form.name.data)
             db.session.add(user)
             session['known'] = False
+            if app.config['ZEEN_ADMIN']:
+                send_email(app.config['ZEEN_ADMIN'], 'New User',
+                           'mail/new_user', user=user)
         else:
             session['known'] = True
         session['name'] = form.name.data
@@ -85,6 +99,14 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template('500.html'), 500
+
+
+def send_email(to, subject, template, **kwargs):
+    msg = Message(app.config['ZEEN_MAIL_SUBJECT_PREFIX'] + subject,
+                  sender=app.config['ZEEN_MAIL_SENDER'], recipients=[to])
+    msg.body = render_template(template + '.txt', **kwargs)
+    msg.html = render_template(template + '.html', **kwargs)
+    mail.send(msg)
 
 
 if __name__ == '__main__':
