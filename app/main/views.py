@@ -1,9 +1,10 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for
-from . import main
-from .forms import NameForm
+from flask import render_template, session, redirect, url_for, current_app
 from .. import db
 from ..models import User
+from ..email import send_email
+from . import main
+from .forms import NameForm
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -15,8 +16,8 @@ def index():
             user = User(username=form.name.data)
             db.session.add(user)
             session['known'] = False
-            if app.config['ZEEN_ADMIN']:
-                send_email(app.config['ZEEN_ADMIN'], 'New User',
+            if current_app.config['ZEEN_ADMIN']:
+                send_email(current_app.config['ZEEN_ADMIN'], 'New User',
                            'mail/new_user', user=user)
         else:
             session['known'] = True

@@ -5,7 +5,7 @@ class Config:
     SECRET_KEY = os.environ.get('ZEEN_SECRET_KEY') or "zeen.xyz Default Secret Key"
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     ZEEN_MAIL_SUBJECT_PREFIX = '[zeen]'
-    ZEEN_MAIL_SENDER = 'zeen Admin <zeen@hearn.me>'
+    ZEEN_MAIL_SENDER = 'zeen.xyz <admin@zeen.xyz>'
     ZEEN_ADMIN = os.environ.get('ZEEN_ADMIN') or 'zeen@hearn.me'
 
     @staticmethod
