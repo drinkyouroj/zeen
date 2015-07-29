@@ -100,6 +100,10 @@ class User(UserMixin, db.Model):
         db.session.add(self)
         return True
 
+    def ping(self):
+        self.last_seen = datetime.utcnow()
+        db.session.add(self)
+
     def generate_reset_token(self, expiration=7200):
         serializer = Serializer(current_app.config['SECRET_KEY'], expiration)
         return serializer.dumps({'reset': self.id})
