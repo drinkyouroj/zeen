@@ -6,7 +6,7 @@ from ..models import User
 
 
 class LoginForm(Form):
-    email = StringField('Email', validators=[Required(), Length(1, 128), 
+    email = StringField('Email', validators=[Required(), Length(1, 64),
                                              Email()])
     password = PasswordField('Password', validators=[Required()])
     remember_me = BooleanField('Keep me logged in')
@@ -14,7 +14,7 @@ class LoginForm(Form):
 
 
 class RegistrationForm(Form):
-    email = StringField('Email', validators=[Required(), Length(1, 128),
+    email = StringField('Email', validators=[Required(), Length(1, 64),
                                              Email()])
     username = StringField('Username', validators=[
         Required(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
@@ -50,7 +50,7 @@ class PasswordResetRequestForm(Form):
 
 
 class PasswordResetForm(Form):
-    email = StringField('Email', validators=[Required(), Length(1, 128),
+    email = StringField('Email', validators=[Required(), Length(1, 64),
                                              Email()])
     password = PasswordField('New Password', validators=[
         Required(), EqualTo('password2', message='Passwords must match')])
@@ -63,7 +63,7 @@ class PasswordResetForm(Form):
 
 
 class ChangeEmailForm(Form):
-    email = StringField('New Email', validators=[Required(), Length(1, 128),
+    email = StringField('New Email', validators=[Required(), Length(1, 64),
                                                  Email()])
     password = PasswordField('Password', validators=[Required()])
     submit = SubmitField('Update Email Address')
