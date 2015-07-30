@@ -4,6 +4,8 @@ from datetime import datetime
 from flask import current_app, request
 from flask.ext.login import UserMixin, AnonymousUserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from markdown import markdown
+import bleach
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
