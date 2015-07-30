@@ -2,7 +2,7 @@ import unittest
 import time
 from datetime import datetime
 from app import create_app, db
-from app.models import User, AnonymousUser, Role, Permission
+from app.models import Follow, User, AnonymousUser, Role, Permission
 
 
 class UserModelTestCase(unittest.TestCase):
@@ -150,4 +150,41 @@ class UserModelTestCase(unittest.TestCase):
         self.assertTrue('d=retro' in gravatar_retro)
         self.assertTrue('https://secure.gravatar.com/avatar/' +
                         'b58996c504c5638798eb6b511e6f49af' in gravatar_ssl)
+
+    def test_follows(self):
+        user1 = User(email='user1@example.com', password='Test.123')
+        user2 = User(email='user2@example.org', password='456-Test')
+        db.session.add(user1)
+        db.session.add(user2)
+        db.session.commit()
+        self.assertFalse(user1.is_following(user2))
+        self.assertFalse(user1.is_followed_by(user2))
+        timestamp_before = datetime.utcnow()
+        user1.follow(user2)
+        db.session.add(user1)
+        db.session.commit()
+        timestamp_after = datetime.utcnow()
+        self.assertTrue(user1.is_following(user2))
+        self.assertFalse(user1.is_followed_by(user2))
+        self.assertTrue(user2.is_followed_by(user1))
+        self.assertTrue(user1.followed.count() == 1)
+        self.assertTrue(user2.followers.count() == 1)
+        f = user1.followed.all()[-1]
+        self.assertTrue(f.followed == user2)
+        self.assertTrue(timestamp_before <= f.timestamp <= timestamp_after)
+        f = user2.followers.all()[-1]
+        self.assertTrue(f.follower == user1)
+        user1.unfollow(user2)
+        db.session.add(user1)
+        db.session.commit()
+        self.assertTrue(user1.followed.count() == 0)
+        self.assertTrue(user2.followers.count() == 0)
+        self.assertTrue(Follow.query.count() == 0)
+        user2.follow(user1)
+        db.session.add(user1)
+        db.session.add(user2)
+        db.session.commit()
+        db.session.delete(user2)
+        db.session.commit()
+        self.assertTrue(Follow.query.count() == 0)
 
