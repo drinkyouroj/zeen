@@ -9,6 +9,7 @@ class Config:
     ZEEN_ADMIN = os.environ.get('ZEEN_ADMIN') or 'zeen@hearn.me'
 
     ZEEN_POSTS_PER_PAGE = 10
+    ZEEN_FOLLOWERS_PER_PAGE = 20
 
     @staticmethod
     def init_app(app):
