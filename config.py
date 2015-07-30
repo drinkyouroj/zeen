@@ -8,6 +8,8 @@ class Config:
     ZEEN_MAIL_SENDER = 'zeen.xyz <admin@zeen.xyz>'
     ZEEN_ADMIN = os.environ.get('ZEEN_ADMIN') or 'zeen@hearn.me'
 
+    ZEEN_POSTS_PER_PAGE = 10
+
     @staticmethod
     def init_app(app):
         pass
