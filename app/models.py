@@ -51,7 +51,7 @@ class Follow(db.Model):
     followed_id = db.Column(db.Integer, db.ForeignKey('users.id'),
                             primary_key=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    
+
 
 class Permission:
     FOLLOW = 0x01
@@ -228,15 +228,15 @@ class User(UserMixin, db.Model):
         db.session.add(self)
         return True
 
-    def gravatar(self, size=100, default='identicon'):
+    def gravatar(self, size=100, default='identicon', rating='g'):
         if request.is_secure:
             url = 'https://secure.gravatar.com/avatar'
         else:
             url = 'http://www.gravatar.com/avatar'
         hash = self.avatar_hash or hashlib.md5(
             self.email.encode('utf-8')).hexdigest()
-        return '{url}/{hash}?s={size}&d={default}'.format(
-            url=url, hash=hash, size=size, default=default)
+        return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(
+            url=url, hash=hash, size=size, default=default, rating=rating)
 
     def can(self, permissions):
         return self.role is not None and \
