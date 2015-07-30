@@ -29,6 +29,7 @@ def index():
                             current_time=datetime.utcnow())
 
 
-@main.route('/user/<name>')
-def user(name):
-    return render_template('user.html', name=name)
+@main.route('/user/<username>')
+def user(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    return render_template('user.html', user=user)
