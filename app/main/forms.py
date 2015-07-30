@@ -1,4 +1,5 @@
 from flask.ext.wtf import Form
+from flask.ext.pagedown.fields import PageDownField
 from wtforms import StringField, TextAreaField, BooleanField, SelectField, \
     SubmitField, ValidationError
 from wtforms.validators import Required, Length, Email, Regexp
@@ -6,7 +7,7 @@ from ..models import Role, User
 
 
 class PostForm(Form):
-    body = TextAreaField(validators=[Required()])
+    body = PageDownField(validators=[Required()])
     submit = SubmitField('Submit')
 
 
