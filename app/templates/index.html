@@ -1,18 +1,9 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}zeen{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
-    <h1>This is zeen.xyz</h1>
-    {% if current_user.is_authenticated() %}
-    <h3>Hi, {{ current_user.username }}!</h3>
-    {% else %}
-    <h3>Welcome, stranger.</h3>
-    {% endif %}
+    <h1>Hello, {% if current_user.is_authenticated() %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
 </div>
-
-<p>Page rendered at {{ moment(current_time).format('LLL') }} ({{ moment(current_time).fromNow(refresh=True) }}).</p>
-
 {% endblock %}
